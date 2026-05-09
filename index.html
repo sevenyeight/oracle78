@@ -1,60 +1,77 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Seveny Eight — Creative Oracle</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  .app { padding: 1.25rem 1rem 5rem; max-width: 430px; margin: 0 auto; font-family: var(--font-sans); }
+  body, html { background: #0e0e0e; color: #f0ede8; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif; min-height: 100vh; }
 
-  .wordmark { font-size: 13px; font-weight: 500; letter-spacing: 0.12em; color: var(--color-text-tertiary); text-align: center; margin-bottom: 1.5rem; padding-top: 0.5rem; }
+  .app { padding: 1.5rem 1.25rem 6rem; max-width: 480px; margin: 0 auto; min-height: 100vh; }
 
-  .tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+  .wordmark { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; color: #555; text-align: center; margin-bottom: 2rem; padding-top: 1rem; text-transform: uppercase; }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 1.75rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { flex-shrink: 0; padding: 9px 16px; font-size: 13px; font-weight: 500; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; background: transparent; color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
-  .tab.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  .tab { flex-shrink: 0; padding: 9px 18px; font-size: 13px; font-weight: 500; border: 1px solid #2a2a2a; border-radius: 999px; background: transparent; color: #666; cursor: pointer; transition: all 0.15s; }
+  .tab.active { background: #f0ede8; color: #0e0e0e; border-color: #f0ede8; }
+  .tab:hover:not(.active) { border-color: #444; color: #bbb; }
 
   .panel { display: none; }
   .panel.active { display: block; }
 
   /* Oracle */
   .oracle-wrap { text-align: center; padding: 0.5rem 0 1.5rem; }
-  .oracle-symbol { width: 52px; height: 52px; margin: 0 auto 1.25rem; opacity: 0.5; }
-  .oracle-question { font-size: 13px; color: var(--color-text-tertiary); margin-bottom: 1.25rem; }
-  .oracle-answer { font-size: 18px; font-weight: 500; color: var(--color-text-primary); line-height: 1.55; min-height: 80px; margin-bottom: 1.5rem; padding: 1.25rem; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); background: var(--color-background-secondary); text-align: left; }
-  .oracle-sub { font-size: 12px; color: var(--color-text-tertiary); margin-top: 8px; font-weight: 400; }
+  .oracle-symbol { width: 56px; height: 56px; margin: 0 auto 1.5rem; opacity: 0.35; }
+  .oracle-q { font-size: 13px; color: #555; margin-bottom: 1.25rem; letter-spacing: 0.03em; }
+  .oracle-answer { font-size: 19px; font-weight: 400; color: #f0ede8; line-height: 1.65; min-height: 100px; margin-bottom: 1.5rem; padding: 1.25rem; border: 1px solid #1e1e1e; border-radius: 16px; background: #141414; text-align: left; }
+  .oracle-sub { font-size: 12px; color: #4a4a4a; margin-top: 10px; font-style: italic; font-weight: 400; }
+  .oracle-placeholder { color: #3a3a3a; font-size: 15px; }
 
   /* Prompt */
-  .pcard { padding: 1.25rem; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); background: var(--color-background-secondary); margin-bottom: 10px; }
-  .plabel { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 6px; }
-  .ptext { font-size: 16px; color: var(--color-text-primary); line-height: 1.6; }
+  .pcard { padding: 1.25rem; border: 1px solid #1e1e1e; border-radius: 16px; background: #141414; margin-bottom: 10px; }
+  .plabel { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: #4a4a4a; text-transform: uppercase; margin-bottom: 8px; }
+  .ptext { font-size: 16px; color: #f0ede8; line-height: 1.65; }
+  .ptext.muted { color: #3a3a3a; }
 
   /* Combo */
   .combo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
-  .ccard { padding: 14px 12px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); background: var(--color-background-secondary); }
-  .clabel { font-size: 10px; color: var(--color-text-tertiary); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
-  .cval { font-size: 14px; font-weight: 500; color: var(--color-text-primary); line-height: 1.3; }
+  .ccard { padding: 14px 13px; border: 1px solid #1e1e1e; border-radius: 14px; background: #141414; }
+  .clabel { font-size: 10px; color: #4a4a4a; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .cval { font-size: 14px; font-weight: 500; color: #f0ede8; line-height: 1.35; }
+  .cval.empty { color: #2e2e2e; }
 
   /* Saved */
   .saved-list { display: flex; flex-direction: column; gap: 8px; }
-  .sitem { padding: 14px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); background: var(--color-background-secondary); display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-  .stext { font-size: 14px; color: var(--color-text-primary); line-height: 1.5; flex: 1; }
-  .smeta { font-size: 11px; color: var(--color-text-tertiary); margin-top: 3px; }
-  .sremove { font-size: 20px; color: var(--color-text-tertiary); cursor: pointer; background: none; border: none; padding: 0; line-height: 1; flex-shrink: 0; }
-  .empty { text-align: center; padding: 2.5rem 1rem; color: var(--color-text-tertiary); font-size: 14px; line-height: 1.6; }
+  .sitem { padding: 14px; border: 1px solid #1e1e1e; border-radius: 14px; background: #141414; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .stext { font-size: 14px; color: #f0ede8; line-height: 1.5; flex: 1; }
+  .smeta { font-size: 11px; color: #4a4a4a; margin-top: 4px; }
+  .sremove { font-size: 22px; color: #333; cursor: pointer; background: none; border: none; padding: 0; line-height: 1; flex-shrink: 0; }
+  .empty-state { text-align: center; padding: 3rem 1rem; color: #3a3a3a; font-size: 14px; line-height: 1.8; }
 
   /* Buttons */
-  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .btn { flex: 1; min-width: 120px; padding: 14px 12px; font-size: 15px; font-weight: 500; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: all 0.12s; }
-  .btn:active { transform: scale(0.97); background: var(--color-background-secondary); }
-  .btn-main { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  .btn-row { display: flex; gap: 8px; }
+  .btn { flex: 1; padding: 16px 12px; font-size: 15px; font-weight: 500; border-radius: 14px; cursor: pointer; transition: all 0.12s; border: 1px solid #2a2a2a; background: #161616; color: #f0ede8; }
+  .btn:active { transform: scale(0.97); }
+  .btn-main { background: #f0ede8; color: #0e0e0e; border-color: #f0ede8; }
   .btn-main:active { opacity: 0.85; transform: scale(0.97); }
-  .btn-ghost { background: transparent; }
+  .btn-ghost { background: transparent; color: #666; border-color: #222; }
 
-  .fade-in { animation: fi 0.25s ease; }
+  .fade-in { animation: fi 0.28s ease; }
   @keyframes fi { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (min-width: 600px) {
+    .app { padding: 3rem 2.5rem 5rem; max-width: 580px; }
+    .combo-grid { grid-template-columns: repeat(3, 1fr); }
+    .oracle-answer { font-size: 21px; }
+    .ptext { font-size: 17px; }
+  }
 </style>
-
-<h2 class="sr-only">Seveny Eight creative oracle — daily prompts, idea randomizer, and oracle</h2>
-
+</head>
+<body>
 <div class="app">
-  <div class="wordmark">SEVENY EIGHT</div>
+  <div class="wordmark">Seveny Eight</div>
 
   <div class="tabs">
     <button class="tab active" onclick="sw('oracle')">Oracle</button>
@@ -63,30 +80,28 @@
     <button class="tab" onclick="sw('saved')">Saved</button>
   </div>
 
-  <!-- Oracle -->
   <div class="panel active" id="panel-oracle">
     <div class="oracle-wrap">
-      <svg class="oracle-symbol" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="26" cy="26" r="23" stroke="var(--color-border-secondary)" stroke-width="1"/>
-        <circle cx="26" cy="26" r="14" stroke="var(--color-border-secondary)" stroke-width="0.5"/>
-        <line x1="26" y1="3" x2="26" y2="49" stroke="var(--color-border-secondary)" stroke-width="0.5"/>
-        <line x1="3" y1="26" x2="49" y2="26" stroke="var(--color-border-secondary)" stroke-width="0.5"/>
-        <circle cx="26" cy="26" r="2.5" fill="var(--color-text-tertiary)"/>
+      <svg class="oracle-symbol" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="25" stroke="#f0ede8" stroke-width="1"/>
+        <circle cx="28" cy="28" r="15" stroke="#f0ede8" stroke-width="0.5"/>
+        <line x1="28" y1="3" x2="28" y2="53" stroke="#f0ede8" stroke-width="0.5"/>
+        <line x1="3" y1="28" x2="53" y2="28" stroke="#f0ede8" stroke-width="0.5"/>
+        <circle cx="28" cy="28" r="2.5" fill="#f0ede8"/>
       </svg>
-      <p class="oracle-question">What should I make today?</p>
-      <div class="oracle-answer" id="oracle-text"><span style="color:var(--color-text-tertiary);font-size:15px;font-weight:400;">Ask the oracle when you're ready.</span></div>
+      <p class="oracle-q">What should I make today?</p>
+      <div class="oracle-answer" id="oracle-text"><span class="oracle-placeholder">Ask the oracle when you're ready.</span></div>
       <div class="btn-row">
         <button class="btn btn-main" onclick="askOracle()">Ask the oracle</button>
-        <button class="btn btn-ghost" onclick="saveItem(document.getElementById('oracle-text').innerText,'Oracle')">Save</button>
+        <button class="btn btn-ghost" onclick="saveOracle()">Save</button>
       </div>
     </div>
   </div>
 
-  <!-- Daily Prompt -->
   <div class="panel" id="panel-prompt">
-    <div class="pcard fade-in" id="pcard-main">
+    <div class="pcard" id="pcard-main">
       <div class="plabel">Today's prompt</div>
-      <div class="ptext" id="ptext">Tap generate for today's prompt.</div>
+      <div class="ptext muted" id="ptext">Tap generate for today's prompt.</div>
     </div>
     <div class="pcard" id="pcard-twist" style="display:none;">
       <div class="plabel">The twist</div>
@@ -94,19 +109,18 @@
     </div>
     <div class="btn-row" style="margin-top:1.25rem;">
       <button class="btn btn-main" onclick="genPrompt()">Generate</button>
-      <button class="btn btn-ghost" onclick="saveItem(document.getElementById('ptext').innerText,'Prompt')">Save</button>
+      <button class="btn btn-ghost" onclick="savePrompt()">Save</button>
     </div>
   </div>
 
-  <!-- Randomizer -->
   <div class="panel" id="panel-combo">
     <div class="combo-grid" id="combo-grid">
-      <div class="ccard"><div class="clabel">Medium</div><div class="cval" id="c-medium">—</div></div>
-      <div class="ccard"><div class="clabel">Subject</div><div class="cval" id="c-subject">—</div></div>
-      <div class="ccard"><div class="clabel">Mood</div><div class="cval" id="c-mood">—</div></div>
-      <div class="ccard"><div class="clabel">Format</div><div class="cval" id="c-format">—</div></div>
-      <div class="ccard"><div class="clabel">Constraint</div><div class="cval" id="c-constraint">—</div></div>
-      <div class="ccard"><div class="clabel">Inspiration</div><div class="cval" id="c-inspiration">—</div></div>
+      <div class="ccard"><div class="clabel">Medium</div><div class="cval empty" id="c-medium">—</div></div>
+      <div class="ccard"><div class="clabel">Subject</div><div class="cval empty" id="c-subject">—</div></div>
+      <div class="ccard"><div class="clabel">Mood</div><div class="cval empty" id="c-mood">—</div></div>
+      <div class="ccard"><div class="clabel">Format</div><div class="cval empty" id="c-format">—</div></div>
+      <div class="ccard"><div class="clabel">Constraint</div><div class="cval empty" id="c-constraint">—</div></div>
+      <div class="ccard"><div class="clabel">Inspiration</div><div class="cval empty" id="c-inspiration">—</div></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-main" onclick="genCombo()">Randomize</button>
@@ -114,17 +128,15 @@
     </div>
   </div>
 
-  <!-- Saved -->
   <div class="panel" id="panel-saved">
     <div class="saved-list" id="saved-list">
-      <div class="empty" id="saved-empty">Nothing saved yet.<br>Generate something and save it.</div>
+      <div class="empty-state" id="saved-empty">Nothing saved yet.<br>Generate something and save it.</div>
     </div>
   </div>
 </div>
 
 <script>
 const saved = [];
-
 const oracles = [
   ["Paint the silence between two things in nature.", "Watercolor / gouache"],
   ["Build a small robot from clay — give it one emotion.", "Polymer clay"],
@@ -142,7 +154,6 @@ const oracles = [
   ["Abstract the feeling of waking at 12:45am.", "Mixed media"],
   ["Something minimal. One shape. One color. One meaning.", "Gouache or digital"],
 ];
-
 const prompts = [
   ["Document one moment from your last fishing trip as a painting.", "No photo reference. Memory only."],
   ["Make a piece small enough to fit in your palm.", "Scale changes everything."],
@@ -160,7 +171,6 @@ const prompts = [
   ["Paint water. Any water. From today.", "PNW prep."],
   ["Make something that belongs in a children's book.", "KDP pipeline."],
 ];
-
 const mediums = ["Watercolor","Gouache","Oil","Acrylic","Digital","Mixed media","Polymer clay","Ink + wash","Pencil sketch","Gouache + ink"];
 const subjects = ["A robot in tall grass","Still water at dawn","A single tree","Fishing gear up close","A small creature","Abstract nature","Fog on a hillside","Found objects","The Pacific Northwest","An old machine in moss","Rain on a surface","A shoreline","Hands holding something","A bird mid-motion","Deep forest light"];
 const moods = ["Contemplative","Melancholy","Quiet joy","Unsettled","Still","Curious","Aching","Hopeful","Dreaming","Grounded","Adrift","Warm","Lonely","Peaceful","Wild"];
@@ -169,66 +179,66 @@ const constraints = ["No black","One color family only","No erasing","30-minute 
 const inspirations = ["Fishing this morning","12:45am light","The move to Shelton","A robot discovering quiet","Seveny Eight's palette","Something you passed today","A childhood memory","What freedom looks like","The Pacific coast","A tool or object nearby"];
 
 function pick(a) { return a[Math.floor(Math.random()*a.length)]; }
+function anim(el) { el.classList.remove('fade-in'); void el.offsetWidth; el.classList.add('fade-in'); }
 
 function askOracle() {
   const [msg, note] = pick(oracles);
   const el = document.getElementById('oracle-text');
   el.innerHTML = msg + '<div class="oracle-sub">' + note + '</div>';
-  el.classList.remove('fade-in'); void el.offsetWidth; el.classList.add('fade-in');
+  anim(el);
 }
-
+function saveOracle() {
+  const t = document.getElementById('oracle-text').innerText;
+  if (t.includes("ready")) return;
+  saveItem(t.split('\n')[0], 'Oracle');
+}
 function genPrompt() {
   const [main, twist] = pick(prompts);
-  document.getElementById('ptext').innerText = main;
+  const pt = document.getElementById('ptext');
+  pt.innerText = main; pt.classList.remove('muted');
   document.getElementById('ptwist').innerText = twist;
   document.getElementById('pcard-twist').style.display = 'block';
-  const c = document.getElementById('pcard-main');
-  c.classList.remove('fade-in'); void c.offsetWidth; c.classList.add('fade-in');
+  anim(document.getElementById('pcard-main'));
 }
-
+function savePrompt() {
+  const t = document.getElementById('ptext').innerText;
+  if (t.includes("Tap")) return;
+  saveItem(t, 'Prompt');
+}
 function genCombo() {
-  document.getElementById('c-medium').innerText = pick(mediums);
-  document.getElementById('c-subject').innerText = pick(subjects);
-  document.getElementById('c-mood').innerText = pick(moods);
-  document.getElementById('c-format').innerText = pick(formats);
-  document.getElementById('c-constraint').innerText = pick(constraints);
-  document.getElementById('c-inspiration').innerText = pick(inspirations);
-  const g = document.getElementById('combo-grid');
-  g.classList.remove('fade-in'); void g.offsetWidth; g.classList.add('fade-in');
+  const f = ['c-medium','c-subject','c-mood','c-format','c-constraint','c-inspiration'];
+  const d = [mediums,subjects,moods,formats,constraints,inspirations];
+  f.forEach((id,i) => { const el = document.getElementById(id); el.innerText = pick(d[i]); el.classList.remove('empty'); });
+  anim(document.getElementById('combo-grid'));
 }
-
 function saveCombo() {
   const m = document.getElementById('c-medium').innerText;
   if (m === '—') return;
-  const text = [m, document.getElementById('c-subject').innerText, document.getElementById('c-mood').innerText].join(' · ');
-  saveItem(text, 'Combo');
+  saveItem([m, document.getElementById('c-subject').innerText, document.getElementById('c-mood').innerText].join(' · '), 'Combo');
 }
-
 function saveItem(text, type) {
-  if (!text || text.includes('ready') || text.includes('Tap') || text === '—') return;
+  if (!text || text === '—') return;
   saved.unshift({ text, type, time: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) });
   renderSaved();
 }
-
 function renderSaved() {
   const list = document.getElementById('saved-list');
   const empty = document.getElementById('saved-empty');
-  if (saved.length === 0) { empty.style.display = 'block'; list.innerHTML = ''; list.appendChild(empty); return; }
-  empty.style.display = 'none';
-  list.innerHTML = '';
+  if (!saved.length) { list.innerHTML = ''; list.appendChild(empty); empty.style.display = 'block'; return; }
+  empty.style.display = 'none'; list.innerHTML = '';
   saved.forEach((item, i) => {
     const d = document.createElement('div');
-    d.className = 'sitem';
+    d.className = 'sitem fade-in';
     d.innerHTML = `<div><div class="stext">${item.text}</div><div class="smeta">${item.type} · ${item.time}</div></div><button class="sremove" onclick="removeSaved(${i})">×</button>`;
     list.appendChild(d);
   });
 }
-
 function removeSaved(i) { saved.splice(i,1); renderSaved(); }
-
 function sw(id) {
   const ids = ['oracle','prompt','combo','saved'];
   document.querySelectorAll('.tab').forEach((t,idx) => t.classList.toggle('active', ids[idx]===id));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id==='panel-'+id));
 }
 </script>
+</body>
+</html>
